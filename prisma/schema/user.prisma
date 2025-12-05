@@ -1,0 +1,8 @@
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  avatar    String?
+  createdAt DateTime  @default(now())
+  sentMessages      Message[] @relation("SentMessages")
+  receivedMessages  Message[] @relation("ReceivedMessages")
+}
