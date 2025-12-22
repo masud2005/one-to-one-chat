@@ -6,6 +6,7 @@ import { Message } from '@prisma';
 export class MessageService {
     constructor(private prisma: PrismaService) { }
 
+    // নতুন message তৈরি করো
     async sendMessage(senderId: number, receiverId: number, content: string): Promise<Message> {
         
         return this.prisma.client.message.create({
@@ -13,6 +14,7 @@ export class MessageService {
                 content,
                 senderId,
                 receiverId,
+                isRead: false, // নতুন message unread হিসেবে তৈরি হবে
             },
             include: {
                 sender: true,
@@ -21,6 +23,7 @@ export class MessageService {
         });
     }
 
+    // দুই user এর মধ্যে সব messages নাও
     async getChatBetween(user1Id: number, user2Id: number) {
         return this.prisma.client.message.findMany({
             where: {
@@ -34,6 +37,30 @@ export class MessageService {
                 receiver: true,
             },
             orderBy: { createdAt: 'asc' },
+        });
+    }
+
+    // Messages কে read mark করো
+    async markMessagesAsRead(messageIds: number[]) {
+        return this.prisma.client.message.updateMany({
+            where: {
+                id: { in: messageIds },
+            },
+            data: {
+                isRead: true,
+                readAt: new Date(),
+            },
+        });
+    }
+
+    // Unread messages count নাও
+    async getUnreadCount(userId: number, senderId: number) {
+        return this.prisma.client.message.count({
+            where: {
+                receiverId: userId,
+                senderId: senderId,
+                isRead: false,
+            },
         });
     }
 }

@@ -1,7 +1,9 @@
 model Message {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   content    String
-  createdAt  DateTime @default(now())
+  createdAt  DateTime  @default(now())
+  isRead     Boolean   @default(false)
+  readAt     DateTime?
 
   senderId   Int
   receiverId Int
