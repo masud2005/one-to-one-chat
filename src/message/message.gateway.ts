@@ -20,7 +20,7 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
   server: Server;
 
   // Online users track করার জন্য Map
-  // Key: viserId, Value: Set of socket IDs (একই user একাধিক device থেকে connect করতে পারে)
+  // Key: userId, Value: Set of socket IDs (একই user একাধিক device থেকে connect করতে পারে)
   private onlineUsers: Map<number, Set<string>> = new Map();
 
   // Socket ID to User ID mapping
